@@ -1,0 +1,5 @@
+disjunction = '\u22C0'
+conjunction = '\u22C1'
+implication = '\u2192'
+double_implication = '\u2194'
+negation  = '\u223c'
