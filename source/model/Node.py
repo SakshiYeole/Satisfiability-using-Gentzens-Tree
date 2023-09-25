@@ -1,27 +1,30 @@
 import copy
-import os
-import sys
-# from typing import List
 
-from model import StringConstants
-from model import Brackets
+import StringConstants
+import Brackets
 
 class Node:
     def __init__(self, LHS, RHS) -> None:
+        # list of list of strings
         self.LHS = []
         for left in LHS:
-            if left is None or not left:
+            if (left is None) or (not left):
                 continue
             else:
                 self.LHS.append(left)
-        
+        if len(self.LHS) == 0:
+            self.LHS.append([])
+
+        # list of list of strings
         self.RHS = []
         for right in RHS:
-            if right is None or not right:
+            if (right is None) or (not right):
                 continue
             else:
                 self.RHS.append(right)
-
+        if len(self.RHS) == 0:
+            self.RHS.append([])
+            
         self.left_child = None
         self.right_child = None
 
@@ -43,6 +46,8 @@ class Node:
 
     def strip_for_list_of_list(self, list):
         for formula in list:
+            if formula is None or len(formula) == 0:
+                continue
             initial_value_bracket = Brackets.Brackets.is_opening_bracket(formula[0])
             while initial_value_bracket:
                 initial_symbol= formula[0]
@@ -62,8 +67,8 @@ class Node:
                             need_to_remove = True
                         break
                 if need_to_remove:
-                    formula.remove(0)
-                    formula.remove(len(formula)-1)
+                    del formula[0]
+                    del formula[len(formula) - 1]
                 else:
                     break
 
@@ -79,7 +84,7 @@ class Node:
     def splitting_character_index(self, formula):
         stack = []
         result = -1
-        for i, symbol in enumerate(symbol):
+        for i, symbol in enumerate(formula):
             # check if symbol is an operator
             if StringConstants.StringOperators.is_operator(symbol):
                 while stack and (StringConstants.StringOperators.precedence_of_operators(symbol) <= StringConstants.StringOperators.precedence_of_operators(formula[stack[-1]])):
@@ -103,7 +108,7 @@ class Node:
     def deep_copy_list_of_list(self, input_list):
         result = []
         for formula in input_list:
-            result.append(list(formula))
+            result.append(copy.deepcopy(formula))
         return result
     
     def break_node_for_left_side(self, left, index):
@@ -279,9 +284,7 @@ class Node:
             if index_of_splitting < 0:
                 # no splitting
                 continue
-
             result = self.break_node_for_left_side(left, index_of_splitting)
-
             assert result is not None
 
             for node in result:
@@ -295,16 +298,14 @@ class Node:
             if index_of_splitting < 0:
                 # no splitting
                 continue
-
-            result = self.break_node_for_left_side(right, index_of_splitting)
-
+            result = self.break_node_for_right_side(right, index_of_splitting)
             assert result is not None
 
             for node in result:
                 node.strip_left_and_right_handside()
             return result
         
-        # returns empty list
+        # returns an empty list
         return []
 
     def is_leaf_node(self):
@@ -327,37 +328,67 @@ class Node:
         return False
     
     def __str__(self):
-        return f"{self.LHS} -> {self.RHS}"
+        return f"{self.LHS} {StringConstants.StringOperators.arrow} {self.RHS}"
     
     # Testing
 
 def main():
-    left_list1 = []
-    left_list1.append("Alice")
-    left_list2 = []
-    # left_list2.append("skdf")
-    left_list2.append("Bob")
-    right_list1 = []
-    right_list2 = []
-    right_list2.append("alice")
-    right_list1.append("Bob")
+    # left_list1 = []
+    # left_list1.append("Alice")
+    # left_list2 = []
+    # # left_list2.append("skdf")
+    # left_list2.append("Bob")
+    # right_list1 = []
+    # right_list2 = []
+    # right_list2.append("alice")
+    # right_list1.append("Bob")
 
+    # right = []
+    # left = []
+
+    # right.append(right_list1)
+    # right.append(right_list2)
+    # left.append(left_list1)
+    # left.append(left_list2)
+
+    # node = Node(left, right)
+    # print(node)
+    # print(node.is_leaf_node())
+    # print(node.is_contradiction())
+
+    # print(StringConstants.StringOperators.arrow)
+    # n = Node()
+    list = []
+    # list.append("(")
+    # list.append("A")
+    # list.append(StringConstants.StringOperators.conjunction)
+    # list.append("(")
+    # list.append("A")
+    # list.append(StringConstants.StringOperators.implication)
+    # list.append("B")
+    # list.append(")")
+    # list.append(")")
+    list.append(StringConstants.StringOperators.negation)
+    list.append("B")
+    list2 = []
     right = []
+    right.append(list)
     left = []
-
-    right.append(right_list1)
-    right.append(right_list2)
-    left.append(left_list1)
-    left.append(left_list2)
-
-    node = Node(left, right)
-    print(node)
-    print(node.is_leaf_node())
-    print(node.is_contradiction())
-
+    left.append(list2)
+    n = Node(left, right)
+    print(n)
+    # i = n.splitting_character_index(right[0])
+    # print(n.break_a_formula_into_two_parts_given_index(list, i))
+    # print(i)
+    # print(n.break_node_for_right_side(right[0], i))
+    # for x in n.break_node_for_right_side(right[0], i):
+    #     print(x)
+    # print(n.deep_copy_list_of_list(list))
+    # print(n)
+    # print(n.get_new_nodes())
+    for x in n.get_new_nodes():
+        print(x)
 
 
 if __name__ == "__main__":
     main()
-    
-    
