@@ -1,7 +1,8 @@
 from collections import deque
-from model import Node
+import Node
+import StringConstants
 class GentzensTree:
-    def __init__(self, expression) -> None:
+    def __init__(self, expression):
         LHS = []
         RHS = []
         RHS.append(expression)
@@ -28,7 +29,7 @@ class GentzensTree:
                 curr_node.set_left_child(new_nodes_for_curr[0])
                 curr_node.set_right_child(new_nodes_for_curr[1])
 
-            unserved_nodes.append(new_nodes_for_curr)
+            unserved_nodes.extend(new_nodes_for_curr)
 
     def print_tree(self):
         print("Level Order Traversal of the Gentzen's Proof Tree: ")
@@ -60,5 +61,28 @@ class GentzensTree:
     
     def check_satisfiability(self):
         return self.check_contradiction is not None
+    
+def main():
+    list = []
+    list.append("(")
+    list.append("A")
+    list.append(StringConstants.StringOperators.conjunction)
+    list.append("(")
+    list.append("A")
+    list.append(StringConstants.StringOperators.implication)
+    list.append("B")
+    list.append(")")
+    list.append(")")
+    list.append(StringConstants.StringOperators.implication)
+    list.append("B")
+
+    g = GentzensTree(list)
+    g.algorithm_for_gentzen_system_creating_tree()
+    print(g.check_satisfiability)
+
+    g.print_tree()
+
+if __name__ == "__main__":
+    main()
 
         
