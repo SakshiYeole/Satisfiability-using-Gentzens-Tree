@@ -5,6 +5,7 @@ class StringOperators:
     implication = '\u2192'
     double_implication = '\u2194'
     negation  = '\u223c'
+    arrow = '\u21D2'
 
     @staticmethod
     def is_operator(str_value):
@@ -21,3 +22,9 @@ class StringOperators:
             StringOperators.double_implication: 5 
         }
         return precedence.get(operator, -1)
+
+# print(StringOperators.disjunction)
+# print(StringOperators.conjunction)
+# print(StringOperators.implication)
+# print(StringOperators.double_implication)
+# print(StringOperators.negation)
