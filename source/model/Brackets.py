@@ -21,3 +21,12 @@ class Brackets:
         elif bracket == Brackets.square_opening:
             return Brackets.sqaure_closing
         return None
+    
+    @staticmethod
+    def append_bracket_at_start_and_end(list):
+        result = []
+        result.append(Brackets.round_opening)
+        result.extend(list)
+        result.append(Brackets.round_closing)
+        return result
+    

@@ -111,11 +111,50 @@ class Node:
             result.append(copy.deepcopy(formula))
         return result
     
+    def generate_new_formula_for_double_implication(self, first, second):
+        first_implication_formula = []
+        first_implication_formula.extend(first)
+        first_implication_formula.append(StringConstants.StringOperators.implication)
+        first_implication_formula.extend(second)
+
+        first_implication_formula = Brackets.Brackets.append_bracket_at_start_and_end(first_implication_formula)
+
+        second_implication_formula = []
+        second_implication_formula.extend(second)
+        second_implication_formula.append(StringConstants.StringOperators.implication)
+        second_implication_formula.extend(first)
+
+        second_implication_formula = Brackets.Brackets.append_bracket_at_start_and_end(second_implication_formula)
+
+        result = []
+        result.extend(first_implication_formula)
+        result.append(StringConstants.StringOperators.conjunction)
+        result.extend(second_implication_formula)
+
+        result = Brackets.Brackets.append_bracket_at_start_and_end(result)
+        
+        return result
+
     def break_node_for_left_side(self, left, index):
         broken_formula = self.break_a_formula_into_two_parts_given_index(left, index)
         symbol_on_which_splitting = left[index]
+        if symbol_on_which_splitting == StringConstants.StringOperators.double_implication:
+            # create one different node, lambda, A <-> B => delta
+            #                           lambda, ( A -> B ) and ( B -> A ) => delta
 
-        if symbol_on_which_splitting == StringConstants.StringOperators.implication:
+            new_lhs = self.deep_copy_list_of_list(self.LHS)
+            new_lhs.remove(left)
+            new_formula = self.generate_new_formula_for_double_implication(broken_formula[0], broken_formula[1])
+            new_lhs.append(new_formula)
+
+            new_rhs = self.deep_copy_list_of_list(self.RHS)
+
+            new_node = Node(new_lhs, new_rhs)
+            node_list = [new_node]
+
+            return node_list
+            
+        elif symbol_on_which_splitting == StringConstants.StringOperators.implication:
             # create two nodes, A->B => delta
             #       lambda, B => delta
             #       lambda  => A, delta
@@ -200,7 +239,22 @@ class Node:
         broken_formula = self.break_a_formula_into_two_parts_given_index(right, index)
         symbol_on_which_splitting = right[index]
 
-        if symbol_on_which_splitting == StringConstants.StringOperators.implication:
+        if symbol_on_which_splitting == StringConstants.StringOperators.double_implication:
+            # create one different node, lambda => A <-> B, delta
+            #                           lambda => ( A -> B ) and ( B -> A ), delta
+
+            new_lhs = self.deep_copy_list_of_list(self.LHS)
+
+            new_rhs = self.deep_copy_list_of_list(self.RHS)
+            new_rhs.remove(right)
+            new_formula = self.generate_new_formula_for_double_implication(broken_formula[0], broken_formula[1])
+            new_rhs.append(new_formula)
+            new_node = Node(new_lhs, new_rhs)
+            node_list = [new_node]
+
+            return node_list
+        
+        elif symbol_on_which_splitting == StringConstants.StringOperators.implication:
             # create one different node, lambda => A->B, delta
             #                           lambda, A => B, delta
 
