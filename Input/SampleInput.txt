@@ -1,0 +1,12 @@
+( ∼ P → Q ) → ( ∼ R → S)            no contradiction
+( A ⋀ ( A → B ) ) → B               contradiction
+( ( A ⋁ B ) → ∼ A ) ⋁ ( ∼ A → ∼ C )     contradiction
+
+
+
+
+⋁
+⋀
+→
+↔
+∼
