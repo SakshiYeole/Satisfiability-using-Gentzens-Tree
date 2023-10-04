@@ -30,15 +30,13 @@
    </details>
 
 
-<p>NOTE: The input grammar should be written <a href="Input/InputGrammar.txt">here</a>.</p>
+<p>NOTE: The input grammar should be written <a href="Input/InputExpression.txt">here</a>.</p>
 
 ## Workflow of the code
 <p>Check the main.py file to understand the flow. Following are the steps:</p>
 
 1. Create empty output directory.
-2. Take the input grammar from "InputGrammar.txt".
-3. Print the input grammar to output file.
-4. Compute transitions of the LR(0) automaton.
-5. Compute indexing of states.
-6. Compute the parsing table.
-7. Print the transitions, indexing of states and parsing table to output file.
+2. Take the input expression from "InputExpression.txt".
+3. Apply the Algorithm of gentzen tree on the given expression.
+4. Print the Level Order Traversal of the tree.
+5. Check whether the expression is satisfiable or not.
