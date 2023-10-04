@@ -13,7 +13,7 @@ class StringOperators:
         return str_value in operators
     
     @staticmethod
-    def precedence_of_operators(operator):
+    def reverse_precedence_of_operators(operator):
         precedence = { 
             StringOperators.negation: 1,
             StringOperators.disjunction: 2,

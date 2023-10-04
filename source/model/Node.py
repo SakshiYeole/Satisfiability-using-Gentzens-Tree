@@ -87,7 +87,7 @@ class Node:
         for i, symbol in enumerate(formula):
             # check if symbol is an operator
             if StringConstants.StringOperators.is_operator(symbol):
-                while stack and (StringConstants.StringOperators.precedence_of_operators(symbol) <= StringConstants.StringOperators.precedence_of_operators(formula[stack[-1]])):
+                while stack and (StringConstants.StringOperators.reverse_precedence_of_operators(symbol) <= StringConstants.StringOperators.reverse_precedence_of_operators(formula[stack[-1]])):
                     result = stack[-1]
                     stack.pop()
                 stack.append(i)

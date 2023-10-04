@@ -1,7 +1,7 @@
 import os
 import sys
 
-path = os.getcwd() + '\model'
+path = os.getcwd() + '\\model'
 sys.path.append(path)
 from model import GentzensTree
 from model import StringConstants
